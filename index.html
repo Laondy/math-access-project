@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 2 Math - Full Interactive Review</title>
+    <style>
+        /* =================================== CSS STYLES =================================== */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            direction: ltr;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #ff6347;
+            text-align: center;
+            border-bottom: 4px solid #ff6347;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #4682b4;
+            border-left: 5px solid #4682b4;
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+        .lesson-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .lesson-card {
+            display: block;
+            text-decoration: none;
+            background-color: #e6f7ff;
+            border: 1px solid #4682b4;
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: #333;
+        }
+        .lesson-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+        .lesson-card h2 {
+            color: #ff6347;
+            border-left: none;
+            padding-left: 0;
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 1.3em;
+        }
+        .lesson-card p {
+            font-size: 0.9em;
+            margin: 0;
+        }
+        .content-section {
+            display: none; /* Hide all sections by default */
+            padding-top: 20px;
+        }
+        .content-section.active {
+            display: block; /* Show active section */
+        }
+        .lesson-section {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        .example {
+            background-color: #e6f7ff;
+            border-left: 3px solid #4682b4;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        .quiz-box {
+            background-color: #fff0f5;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px dashed #ffc0cb;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            margin-top: 15px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            width: 70%;
+            max-width: 300px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #e55337;
+        }
+        #feedback, #op-feedback, #graph-feedback, #geometry-feedback, #time-feedback, #problem-feedback {
+            margin-top: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        table {
+            width: 80%;
+            margin: 15px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #4682b4;
+            color: white;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #4682b4;
+            font-weight: bold;
+            padding: 5px 10px;
+            border: 1px solid #4682b4;
+            border-radius: 5px;
+            float: left;
+        }
+        .back-link:hover {
+            background-color: #4682b4;
+            color: white;
+        }
+    </style>
+</head>
+<body onload="showPage('home')">
+    <div id="login-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #f0f8ff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100;">
+        <h2>🔐 Secure Access - One-Time Code</h2>
+        <p>Please enter the **Access Code**. This code can be used only once per user.</p>
+        
+        <div style="background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center;">
+            
+            <label for="access-code">Enter Access Code:</label>
+            <input type="text" id="access-code" placeholder="Enter 4-digit code" style="width: 150px; text-align: center;">
+            <button onclick="checkLogin()" style="background-color: #4682b4; margin-top: 15px; display: block; margin-left: auto; margin-right: auto;">Activate Access</button>
+            <p id="login-feedback" style="font-weight: bold; color: red; margin-top: 15px;"></p>
+        </div>
+    </div>
+    <div class="container" id="main-content" style="display:none;">
+        
+        <a href="#" class="back-link" id="nav-back" onclick="showPage('home')" style="display:none;">⬅️ Back to Home</a>
+        <h1 id="main-title">Grade 2 Math 🤩 - Term 1 Lessons</h1>
+
+        <section id="home" class="content-section active">
+            <p style="text-align: center; font-size: 1.1em; color: #4682b4;">Select a lesson to start learning and practicing!</p>
+            <hr style="margin: 20px 0;">
+            
+            <div class="lesson-list">
+                <a href="#" class="lesson-card" onclick="showPage('place_value')">
+                    <h2>📚 Lesson 1: Place Value up to 999</h2>
+                    <p>Ones, Tens, and Hundreds. Practice the Expanded Form.</p>
+                </a>
+                <a href="#" class="lesson-card" onclick="showPage('math_operations')">
+                    <h2>➕ Lesson 2: Addition and Subtraction (2-Digit)</h2>
+                    <p>Master adding and subtracting two-digit numbers.</p>
+                </a>
+                <a href="#" class="lesson-card" onclick="showPage('bar_graphs')">
+                    <h2>📊 Lesson 3: Reading Bar Graphs</h2>
+                    <p>Learn to read, analyze, and compare data using bar graphs.</p>
+                </a>
+                <a href="#" class="lesson-card" onclick="showPage('geometry')">
+                    <h2>📐 Lesson 4: 2D and 3D Shapes</h2>
+                    <p>Explore the properties of flat and solid shapes (sides, faces, vertices).</p>
+                </a>
+                <a href="#" class="lesson-card" onclick="showPage('money_time')">
+                    <h2>⏰ Lesson 5: Money and Time</h2>
+                    <p>Learn to count money (coins) and tell time to the nearest five minutes.</p>
+                </a>
+                <a href="#" class="lesson-card" onclick="showPage('word_problems')">
+                    <h2>📝 Lesson 6: Solving Word Problems</h2>
+                    <p>Identify keywords to solve addition and subtraction problems (up to 3 digits and money).</p>
+                </a>
+            </div>
+        </section>
+
+        <section id="place_value" class="content-section">
+            <h2>📚 Lesson 1: Place Value up to 999</h2>
+            <div class="lesson-section">
+                <p><strong>Place Value</strong> helps us understand the value of each digit in a number.</p>
+                <div class="example">
+                    <h3>Example: The number 458</h3>
+                    <p>Digit <strong>8</strong> is in the <strong>Ones</strong> place. Its value is 8.</p>
+                    <p>Digit <strong>5</strong> is in the <strong>Tens</strong> place. Its value is 50.</p>
+                    <p>Digit <strong>4</strong> is in the <strong>Hundreds</strong> place. Its value is 400.</p>
+                    <p>Expanded Form: **400 + 50 + 8**</p>
+                </div>
+            </div>
+            <section class="activity-section">
+                <h2>🧠 Interactive Practice: Place Value Quiz</h2>
+                <div class="quiz-box" id="place-value-quiz">
+                    <p>What is the value of the digit <span id="digit">?</span> in the number <span id="number">???</span>?</p>
+                    <input type="text" id="user-answer" placeholder="Enter the value (e.g., 50 or 500)">
+                    <button onclick="checkPlaceValueAnswer()">Check Answer</button>
+                    <p id="feedback"></p>
+                    <button onclick="generateQuestion()" id="next-button" style="display:none;">Next Question ➡️</button>
+                </div>
+            </section>
+        </section>
+
+        <section id="math_operations" class="content-section">
+            <h2>➕ Lesson 2: Addition and Subtraction (2-Digit Numbers)</h2>
+            <div class="lesson-section">
+                <p>We can add and subtract two-digit numbers using the **Expanded Form** method.</p>
+                <div class="example">
+                    <h3>Example: Addition $32 + 45$</h3>
+                    <p>1. Expand: $(30 + 2) + (40 + 5)$</p>
+                    <p>2. Group Tens and Ones: $(30 + 40) + (2 + 5)$</p>
+                    <p>3. Add: $70 + 7 = \mathbf{77}$</p>
+                </div>
+            </div>
+            <section class="activity-section">
+                <h2>✏️ Interactive Practice: Solve the Math Problem</h2>
+                <div class="quiz-box" id="math-op-quiz">
+                    <p><span id="num1">??</span> <span id="operator">+</span> <span id="num2">??</span> = ?</p>
+                    <input type="text" id="op-user-answer" placeholder="Enter your answer">
+                    <button onclick="checkMathOpAnswer()">Check Answer</button>
+                    <p id="op-feedback"></p>
+                    <button onclick="generateOperation()" id="op-next-button">Next Problem 🔄</button>
+                </div>
+            </section>
+        </section>
+        
+        <section id="bar_graphs" class="content-section">
+            <h2>📊 Lesson 3: Reading Bar Graphs</h2>
+            <div class="lesson-section">
+                <p><strong>Bar Graphs</strong> are used to organize and compare data (information). They use bars to show how many items are in each category.</p>
+                <div class="example">
+                    <h3>Key things to look for:</h3>
+                    <ul>
+                        <li><strong>Title:</strong> Tells you what the graph is about.</li>
+                        <li><strong>Scale (Numbers):</strong> Shows you how many items each bar represents.</li>
+                    </ul>
+                </div>
+            </div>
+            <section class="activity-section">
+                <h2>❓ Interactive Practice: Analyze the Data</h2>
+                <table id="graph-data-table">
+                    <thead><tr><th>Category</th><th>A (Apples)</th><th>B (Bananas)</th><th>C (Cherries)</th></tr></thead>
+                    <tbody><tr><td>Count</td><td id="data-a">4</td><td id="data-b">6</td><td id="data-c">2</td></tr></tbody>
+                </table>
+                <div class="quiz-box" id="bar-graph-quiz">
+                    <p id="graph-question"></p>
+                    <input type="text" id="graph-user-answer" placeholder="Enter your answer">
+                    <button onclick="checkGraphAnswer()">Check Answer</button>
+                    <p id="graph-feedback"></p>
+                    <button onclick="generateGraphQuestion()" id="graph-next-button">Next Question 🔄</button>
+                </div>
+            </section>
+        </section>
+        
+        <section id="geometry" class="content-section">
+            <h2>📐 Lesson 4: 2D and 3D Shapes</h2>
+            <div class="lesson-section">
+                <h3>Two-Dimensional (2D) Shapes: Flat Shapes</h3>
+                <p>Have only **sides** and **vertices (corners)**. (e.g., Square, Triangle)</p>
+                <h3>Three-Dimensional (3D) Shapes: Solid Shapes</h3>
+                <p>Have **faces (flat surfaces)**, **edges**, and **vertices**. (e.g., Cube, Sphere)</p>
+            </div>
+            <section class="activity-section">
+                <h2>❓ Interactive Practice: Shape Properties</h2>
+                <div class="quiz-box" id="geometry-quiz">
+                    <p id="geometry-question"></p>
+                    <input type="text" id="geometry-user-answer" placeholder="Enter the number">
+                    <button onclick="checkGeometryAnswer()">Check Answer</button>
+                    <p id="geometry-feedback"></p>
+                    <button onclick="generateGeometryQuestion()" id="geometry-next-button">Next Question 🔄</button>
+                </div>
+            </section>
+        </section>
+
+        <section id="money_time" class="content-section">
+            <h2>⏰ Lesson 5: Money and Time</h2>
+            <div class="lesson-section">
+                <h3>💰 Understanding Money</h3>
+                <p>Strategy: Start counting with the coin that has the **greatest value**.</p>
+                <h3>🕰️ Telling Time</h3>
+                <p>We count minutes by **fives**. (e.g., Minute Hand on 3 is :15)</p>
+            </div>
+            <section class="activity-section">
+                <h2>❓ Interactive Practice: Time to the Hour</h2>
+                <div class="quiz-box" id="time-quiz">
+                    <p id="time-question"></p>
+                    <input type="text" id="time-user-answer" placeholder="Enter the time (e.g., 3:15)">
+                    <button onclick="checkTimeAnswer()">Check Answer</button>
+                    <p id="time-feedback"></p>
+                    <button onclick="generateTimeQuestion()" id="time-next-button">Next Question 🔄</button>
+                </div>
+            </section>
+        </section>
+        
+        <section id="word_problems" class="content-section">
+            <h2>📝 Lesson 6: Solving Word Problems</h2>
+            <div class="lesson-section">
+                <p>Look for **keywords** to decide the operation!</p>
+                <div class="example">Keywords: **Total**, **In all** (+) | **Left**, **Difference**, **How many more** (-)</div>
+            </div>
+            <section class="activity-section">
+                <h2>❓ Interactive Practice: Solve the Problem</h2>
+                <div class="quiz-box" id="word-problem-quiz">
+                    <p id="word-problem-text"></p>
+                    <input type="text" id="problem-user-answer" placeholder="Enter your numerical answer">
+                    <button onclick="checkProblemAnswer()">Check Answer</button>
+                    <p id="problem-feedback"></p>
+                    <button onclick="generateWordProblem()" id="problem-next-button">Next Problem 🔄</button>
+                </div>
+            </section>
+        </section>
+
+    </div>
+
+    <script>
+        // =================================== JAVASCRIPT LOGIC ===================================
+
+        // Global Variables
+        let currentNumber, currentDigit, currentValue; // Place Value
+        let currentNum1, currentNum2, currentOperator, currentResult; // Math Op
+        let graphData = {}, currentGraphQuestion = {}; // Bar Graph
+        let geometryQuestions = [
+            { question: 'How many sides does a Square have?', answer: 4 }, { question: 'How many vertices does a Triangle have?', answer: 3 },
+            { question: 'How many faces does a Cube have?', answer: 6 }, { question: 'How many edges does a Cube have?', answer: 12 },
+            { question: 'How many sides does a Circle have?', answer: 0 }, { question: 'How many circular faces does a Cylinder have?', answer: 2 }
+        ], currentGeometryQuestionIndex; // Geometry
+        let currentTimeAnswer; // Time
+        let currentProblemAnswer, currentProblem; // Word Problems
+
+        // --- 🔑 Login Check Function (Connects to Node.js Server on Port 3000) ---
+        async function checkLogin() {
+            const code = document.getElementById('access-code').value.trim();
+            const feedback = document.getElementById('login-feedback');
+            
+            feedback.textContent = 'Verifying...';
+
+            try {
+                // هذا هو الرابط الذي يتصل بالخادم (server.js) الذي قمنا بتشغيله
+                const response = await fetch('http://localhost:3000/api/activate', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code: code })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    feedback.textContent = "✅ Access granted. Code activated successfully!";
+                    feedback.style.color = "green";
+                    // إخفاء شاشة الدخول وإظهار حاوية الدروس الرئيسية
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block'; 
+
+                } else {
+                    feedback.textContent = '❌ Error: ' + result.message;
+                    feedback.style.color = "red";
+                    
+                    // إذا كان الكود مُفعلاً بالفعل، قم بإظهار الدروس.
+                    if (result.message.includes("already been activated")) {
+                        feedback.textContent = "⚠️ Code is already activated. Accessing content...";
+                        feedback.style.color = "orange";
+                        document.getElementById('login-screen').style.display = 'none';
+                        document.getElementById('main-content').style.display = 'block'; 
+                    }
+                }
+            } catch (error) {
+                console.error('Connection Error:', error);
+                // تظهر هذه الرسالة إذا لم يكن الخادم يعمل
+                feedback.textContent = '❌ Connection Error: Is the server running on Port 3000?';
+                feedback.style.color = "red";
+            }
+        }
+        // --- End of Login Function ---
+
+
+        // --- Navigation Function ---
+        function showPage(pageId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            // Handle visibility of navigation elements
+            if (pageId === 'home') {
+                document.getElementById('nav-back').style.display = 'none';
+                document.getElementById('main-title').textContent = "Grade 2 Math 🤩 - Term 1 Lessons";
+            } else {
+                document.getElementById('nav-back').style.display = 'block';
+                document.getElementById('main-title').textContent = "Grade 2 Math 🤩 - Term 1 Review";
+                
+                // Initialize specific page content
+                if (pageId === 'place_value') initPlaceValuePage();
+                if (pageId === 'math_operations') initMathOpPage();
+                if (pageId === 'bar_graphs') initBarGraphPage();
+                if (pageId === 'geometry') initGeometryPage();
+                if (pageId === 'money_time') initMoneyTimePage();
+                if (pageId === 'word_problems') initWordProblemsPage();
+            }
+        }
+
+        // --- L1: Place Value ---
+        function generateQuestion() {
+            currentNumber = Math.floor(Math.random() * 900) + 100;
+            let numStr = String(currentNumber);
+            let position = Math.floor(Math.random() * 3);
+            currentDigit = numStr[position];
+
+            if (position === 0) currentValue = parseInt(currentDigit) * 100;
+            else if (position === 1) currentValue = parseInt(currentDigit) * 10;
+            else currentValue = parseInt(currentDigit);
+
+            document.getElementById('number').textContent = currentNumber;
+            document.getElementById('digit').textContent = currentDigit;
+            document.getElementById('user-answer').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('next-button').style.display = 'none';
+        }
+        function checkPlaceValueAnswer() {
+            const userAnswer = document.getElementById('user-answer').value.trim();
+            const feedback = document.getElementById('feedback');
+            const nextButton = document.getElementById('next-button');
+            const userValue = parseInt(userAnswer);
+            
+            if (userValue === currentValue) { feedback.textContent = "✅ Correct!"; feedback.style.color = "green"; nextButton.style.display = 'block'; }
+            else { feedback.textContent = `❌ Incorrect. The correct value is ${currentValue}.`; feedback.style.color = "red"; nextButton.style.display = 'none'; }
+        }
+
+        // --- L2: Math Operations ---
+        function generateOperation() {
+            currentNum1 = Math.floor(Math.random() * 90) + 10;
+            currentNum2 = Math.floor(Math.random() * 90) + 10;
+            currentOperator = ['+', '-'][Math.floor(Math.random() * 2)];
+
+            if (currentOperator === '+') { currentResult = currentNum1 + currentNum2; }
+            else { 
+                if (currentNum1 < currentNum2) { [currentNum1, currentNum2] = [currentNum2, currentNum1]; }
+                currentResult = currentNum1 - currentNum2;
+            }
+
+            document.getElementById('num1').textContent = currentNum1;
+            document.getElementById('operator').textContent = currentOperator;
+            document.getElementById('num2').textContent = currentNum2;
+            document.getElementById('op-user-answer').value = '';
+            document.getElementById('op-feedback').textContent = '';
+        }
+        function checkMathOpAnswer() {
+            const userAnswer = document.getElementById('op-user-answer').value.trim();
+            const feedback = document.getElementById('op-feedback');
+            const userValue = parseInt(userAnswer);
+            
+            if (userValue === currentResult) { feedback.textContent = "✅ Excellent!"; feedback.style.color = "green"; }
+            else { feedback.textContent = `❌ Incorrect. The correct answer is ${currentResult}.`; feedback.style.color = "red"; }
+        }
+
+        // --- L3: Bar Graphs ---
+        function generateGraphData() {
+            graphData.A = Math.floor(Math.random() * 9) + 2;
+            graphData.B = Math.floor(Math.random() * 9) + 2;
+            graphData.C = Math.floor(Math.random() * 9) + 2;
+
+            document.getElementById('data-a').textContent = graphData.A;
+            document.getElementById('data-b').textContent = graphData.B;
+            document.getElementById('data-c').textContent = graphData.C;
+        }
+        function generateGraphQuestion() {
+            generateGraphData();
+            const questionTypes = [
+                { text: 'How many items are there in total (A + B + C)?', answer: graphData.A + graphData.B + graphData.C },
+                { text: 'How many more items are in B than in C? (B - C)', answer: graphData.B - graphData.C, valid: graphData.B >= graphData.C },
+                { text: 'How many less items are in C than in A? (A - C)', answer: graphData.A - graphData.C, valid: graphData.A >= graphData.C }
+            ].filter(q => q.valid !== false);
+
+            const qIndex = Math.floor(Math.random() * questionTypes.length);
+            currentGraphQuestion = questionTypes[qIndex];
+            
+            document.getElementById('graph-question').textContent = currentGraphQuestion.text;
+            document.getElementById('graph-user-answer').value = '';
+            document.getElementById('graph-feedback').textContent = '';
+        }
+        function checkGraphAnswer() {
+            const userAnswer = document.getElementById('graph-user-answer').value.trim();
+            const feedback = document.getElementById('graph-feedback');
+            const userValue = parseInt(userAnswer);
+
+            if (userValue === currentGraphQuestion.answer) { feedback.textContent = "✅ Correct!"; feedback.style.color = "green"; }
+            else { feedback.textContent = `❌ Incorrect. The correct answer is ${currentGraphQuestion.answer}.`; feedback.style.color = "red"; }
+        }
+
+        // --- L4: Geometry ---
+        function generateGeometryQuestion() {
+            currentGeometryQuestionIndex = Math.floor(Math.random() * geometryQuestions.length);
+            const question = geometryQuestions[currentGeometryQuestionIndex];
+
+            document.getElementById('geometry-question').textContent = question.question;
+            document.getElementById('geometry-user-answer').value = '';
+            document.getElementById('geometry-feedback').textContent = '';
+        }
+        function checkGeometryAnswer() {
+            const userAnswer = document.getElementById('geometry-user-answer').value.trim();
+            const feedback = document.getElementById('geometry-feedback');
+            const questionData = geometryQuestions[currentGeometryQuestionIndex];
+            const userValue = parseInt(userAnswer);
+
+            if (userValue === questionData.answer) { feedback.textContent = "✅ Correct!"; feedback.style.color = "green"; }
+            else { feedback.textContent = "❌ Incorrect. Try counting again!"; feedback.style.color = "red"; }
+        }
+
+        // --- L5: Money and Time ---
+        function generateTimeQuestion() {
+            const hour = Math.floor(Math.random() * 12) + 1;
+            const minutes = Math.floor(Math.random() * 12) * 5;
+            const minutesStr = minutes < 10 ? '0' + minutes : String(minutes);
+            
+            currentTimeAnswer = `${hour}:${minutesStr}`;
+            
+            document.getElementById('time-question').textContent = `What is the time if the short hand is on ${hour} and the long hand is on the ${minutes / 5} mark?`;
+            document.getElementById('time-user-answer').value = '';
+            document.getElementById('time-feedback').textContent = '';
+        }
+        function checkTimeAnswer() {
+            const userAnswer = document.getElementById('time-user-answer').value.trim();
+            const feedback = document.getElementById('time-feedback');
+            const cleanUserAnswer = userAnswer.replace(/\s+/g, '').replace(/:(\d)$/, ':0$1');
+
+            if (cleanUserAnswer === currentTimeAnswer) { feedback.textContent = "✅ Correct! Time well spent!"; feedback.style.color = "green"; }
+            else { feedback.textContent = `❌ Incorrect. The correct time is ${currentTimeAnswer}.`; feedback.style.color = "red"; }
+        }
+
+        // --- L6 Helper: Money Problems (New Logic) ---
+        function generateMoneyProblem() {
+            const currency = 'pound';
+            const count100 = Math.floor(Math.random() * 5) + 1;
+            const count10 = Math.floor(Math.random() * 8);
+            const count1 = Math.floor(Math.random() * 9) + 1;
+
+            const totalMoney = (count100 * 100) + (count10 * 10) + (count1 * 1);
+            
+            const text = `Bassem has ${count100} banknote(s) of 100 ${currency}, ${count10} banknote(s) of 10 ${currency}, and ${count1} banknote(s) of one ${currency}. How much money does Bassem have in total?`;
+            
+            return { text: text, answer: totalMoney };
+        }
+
+        // --- L6: Word Problems (Updated to include Money problems) ---
+        function generateWordProblem() {
+            const numA_2d = Math.floor(Math.random() * 50) + 10;
+            const numB_2d = Math.floor(Math.random() * 30) + 5;
+            const numA_3d = Math.floor(Math.random() * 400) + 200;
+            const numB_3d = Math.floor(Math.random() * 200) + 50;
+            const n1_sub = Math.max(numA_3d, numB_3d);
+            const n2_sub = Math.min(numA_3d, numB_3d);
+            
+            const moneyProblem = generateMoneyProblem();
+
+            const problems = [
+                // Money Problem (3-Digits) - High priority
+                moneyProblem,
+                
+                // 3-Digit Addition/Subtraction
+                { text: `A library had ${numA_3d} books. They received ${numB_3d} new books as a donation. How many books do they have in total?`, answer: numA_3d + numB_3d },
+                { text: `A factory made ${n1_sub} toys this month. They sold ${n2_sub} toys. How many toys are left?`, answer: n1_sub - n2_sub },
+                
+                // 2-Digit Addition/Subtraction (for variety)
+                { text: `Sara has ${numA_2d} stickers and her friend gave her ${numB_2d} more. How many stickers does Sara have in all?`, answer: numA_2d + numB_2d },
+                { text: `There were ${numA_2d} birds on a tree. ${numB_2d} birds flew away. How many birds are left?`, answer: numA_2d - numB_2d }
+            ];
+
+            currentProblem = problems[Math.floor(Math.random() * problems.length)];
+            currentProblemAnswer = currentProblem.answer;
+
+            document.getElementById('word-problem-text').textContent = currentProblem.text;
+            document.getElementById('problem-user-answer').value = '';
+            document.getElementById('problem-feedback').textContent = '';
+        }
+        function checkProblemAnswer() {
+            const userAnswer = document.getElementById('problem-user-answer').value.trim();
+            const feedback = document.getElementById('problem-feedback');
+            const userValue = parseInt(userAnswer);
+
+            if (userValue === currentProblemAnswer) { feedback.textContent = "✅ Correct! You solved the real-life problem!"; feedback.style.color = "green"; }
+            else { feedback.textContent = `❌ Incorrect. The correct answer is ${currentProblemAnswer}.`; feedback.style.color = "red"; }
+        }
+
+        // --- Initialization Functions ---
+        // تم تحديث هذه الدالة لضمان توليد السؤال الأول فور الدخول للصفحة
+        function initPlaceValuePage() { 
+            if(document.getElementById('place-value-quiz')) {
+                generateQuestion(); 
+            }
+        }
+        function initMathOpPage() { if(document.getElementById('math-op-quiz')) generateOperation(); }
+        function initBarGraphPage() { if(document.getElementById('bar-graph-quiz')) generateGraphQuestion(); }
+        function initGeometryPage() { if(document.getElementById('geometry-quiz')) generateGeometryQuestion(); }
+        function initMoneyTimePage() { if(document.getElementById('time-quiz')) generateTimeQuestion(); }
+        function initWordProblemsPage() { if(document.getElementById('word-problem-quiz')) generateWordProblem(); }
+
+    </script>
+</body>
+</html>
