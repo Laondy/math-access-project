@@ -157,7 +157,8 @@
         }
     </style>
 </head>
-<body onload="showPage('home')">
+<body onload="checkLocalAccess()">
+    
     <div id="login-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #f0f8ff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100;">
         <h2>🔐 Secure Access - One-Time Code</h2>
         <p>Please enter the **Access Code**. This code can be used only once per user.</p>
@@ -345,6 +346,9 @@
     <script>
         // =================================== JAVASCRIPT LOGIC ===================================
 
+        // **هام: قم بتحديث هذا الرابط برابط Vercel الخاص بك بعد النشر **
+        const VERCEL_URL = 'https://your-project-name.vercel.app'; 
+        
         // Global Variables
         let currentNumber, currentDigit, currentValue; // Place Value
         let currentNum1, currentNum2, currentOperator, currentResult; // Math Op
@@ -356,17 +360,32 @@
         ], currentGeometryQuestionIndex; // Geometry
         let currentTimeAnswer; // Time
         let currentProblemAnswer, currentProblem; // Word Problems
+        
+        const ACCESS_KEY = 'grade2_math_access_granted';
 
-        // --- 🔑 Login Check Function (Connects to Node.js Server on Port 3000) ---
+        // --- 🔑 Local Access Check ---
+        function checkLocalAccess() {
+            if (localStorage.getItem(ACCESS_KEY) === 'granted') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                showPage('home'); // تأكد من عرض صفحة الدروس الرئيسية
+            } else {
+                document.getElementById('login-screen').style.display = 'flex';
+                document.getElementById('main-content').style.display = 'none';
+            }
+        }
+        
+        // --- 🔑 Login Check Function (Connects to Vercel API) ---
         async function checkLogin() {
             const code = document.getElementById('access-code').value.trim();
             const feedback = document.getElementById('login-feedback');
             
             feedback.textContent = 'Verifying...';
+            feedback.style.color = "orange";
 
             try {
-                // هذا هو الرابط الذي يتصل بالخادم (server.js) الذي قمنا بتشغيله
-                const response = await fetch('http://localhost:3000/api/activate', { 
+                // الاتصال بـ Serverless Function على Vercel
+                const response = await fetch(`${VERCEL_URL}/api/activate`, { 
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -379,26 +398,43 @@
                 if (result.success) {
                     feedback.textContent = "✅ Access granted. Code activated successfully!";
                     feedback.style.color = "green";
+                    
+                    // تسجيل حالة الدخول محلياً في localStorage
+                    localStorage.setItem(ACCESS_KEY, 'granted');
+                    
                     // إخفاء شاشة الدخول وإظهار حاوية الدروس الرئيسية
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('main-content').style.display = 'block'; 
+                    setTimeout(() => {
+                        document.getElementById('login-screen').style.display = 'none';
+                        document.getElementById('main-content').style.display = 'block'; 
+                        showPage('home');
+                    }, 500);
 
                 } else {
                     feedback.textContent = '❌ Error: ' + result.message;
                     feedback.style.color = "red";
                     
-                    // إذا كان الكود مُفعلاً بالفعل، قم بإظهار الدروس.
+                    // إذا كان الكود مُفعلاً بالفعل
                     if (result.message.includes("already been activated")) {
                         feedback.textContent = "⚠️ Code is already activated. Accessing content...";
                         feedback.style.color = "orange";
-                        document.getElementById('login-screen').style.display = 'none';
-                        document.getElementById('main-content').style.display = 'block'; 
+                        
+                        // منح الدخول حتى لو كان مُفعلاً (لأن المستخدم هو من فعّله)
+                        localStorage.setItem(ACCESS_KEY, 'granted');
+                        setTimeout(() => {
+                            document.getElementById('login-screen').style.display = 'none';
+                            document.getElementById('main-content').style.display = 'block'; 
+                            showPage('home');
+                        }, 500);
+                    }
+                    // إذا كان خطأ اتصال عام (مثل خطأ 500 من الخادم)
+                    if (response.status >= 500) {
+                        feedback.textContent = '❌ Connection Error: Cannot reach server. Please check Vercel deployment status.';
+                        feedback.style.color = "darkred";
                     }
                 }
             } catch (error) {
                 console.error('Connection Error:', error);
-                // تظهر هذه الرسالة إذا لم يكن الخادم يعمل
-                feedback.textContent = '❌ Connection Error: Is the server running on Port 3000?';
+                feedback.textContent = '❌ Network Error: Could not connect to the API.';
                 feedback.style.color = "red";
             }
         }

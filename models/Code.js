@@ -8,4 +8,5 @@ const codeSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
+// يمنع Mongoose من إعادة تعريف النموذج في بيئة Serverless
 module.exports = mongoose.models.Code || mongoose.model('Code', codeSchema);
